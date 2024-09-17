@@ -1,4 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
+import React from 'react';
+import { Icon } from '@iconify/react';
 
 type CellProps = {
     go: string;
@@ -28,7 +30,7 @@ function Cell({ id, go, setGo, cells, setCells, winner }: CellProps) {
                 }
             }
         }} >
-            {cells[id] ? (cells[id] === "circle" ? "O" : "X") : null}
+            {cells[id] ? (cells[id] === "circle" ? <Icon className="c" icon="material-symbols:circle-outline" /> : <Icon className="x" icon="maki:cross" />) : null}
         </div>
     );
 }

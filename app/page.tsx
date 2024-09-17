@@ -18,6 +18,11 @@ export default function Home() {
   const [go, setGo] = useState("circle");
   const [winner, setWinner] = useState(""); // Use state for winner
 
+  function reset_the_variables() {
+    setCells(["", "", "", "", "", "", "", "", ""]);
+    setGo("circle");
+    setWinner("");
+  }
   useEffect(() => {
     let currentWinner = "";
     winningCombos.forEach(combo => {
@@ -27,7 +32,7 @@ export default function Home() {
       }
     });
     if (currentWinner) {
-      setWinner(`Player ${currentWinner} wins!`); // Update winner state with the correct player
+      setWinner(currentWinner); // Update winner state with the correct player
     }
     else if (cells.every(cell => cell !== "") && winner === "") {
       setWinner("Draw!");
@@ -39,14 +44,23 @@ export default function Home() {
 
   return (
     <div className="container">
+      <div className="message">
+        {winner !== "" ? (
+          winner === "Draw!" ? (
+            "Draw!"
+          ) : (
+            <>Player <span className={winner === "circle" ? "circle" : "cross"}>{winner}</span> wins!</>
+          )
+        ) : (
+          `It's now ${go}'s turn`
+        )}
+      </div>
       <div className="gameboard">
         {cells.map((cell, index) => (
           <Cell id={index} go={go} setGo={setGo} key={index} cells={cells} setCells={setCells} winner={winner} />
         ))}
       </div>
-      <div className="message">
-        {winner !== "" ? winner : `It's now ${go}'s turn`}
-      </div>
+      <button className="reset-btn" onClick={reset_the_variables}>Reset</button>
     </div>
   );
 }

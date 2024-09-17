@@ -1,12 +1,20 @@
+html,
+body {
+  margin: 0;
+}
+
 .container {
+  /*height: 100vh;*/
   height: 100vh;
   display: flex;
   flex-direction: column;
   /* text-align: center;
   justify-content: center;
   align-items: center; */
-  margin: 0;
   box-sizing: border-box;
+  background-color: #111b22;
+  margin: 0;
+
 }
 
 .gameboard {
@@ -15,37 +23,67 @@
   height: 300px;
   /*border: 1px solid black;*/
   color: red;
-  margin: auto;
+  margin: 20px auto;
   display: flex;
   /*display: grid;*/
   flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .square {
   /*background-color: red;*/
-  border: 1px solid black;
-  width: 100px;
-  height: 100px;
+  /*border: 1px solid black;*/
+  width: 98px;
+  height: 97px;
   box-sizing: border-box;
-  font-size: 80px;
-  font-weight: bolder;
+  font-size: 50px;
+  /*font-weight: bolder;*/
   display: flex;
   text-align: center;
   justify-content: center;
+  background-color: #20313c;
+  /*margin: 1px;*/
+  border-radius: 5px;
 }
 
 .circle {
-  color: red;
+  color: #45b391;
+}
+
+.c {
+  margin: auto;
+}
+
+.x {
+  margin: auto;
 }
 
 .cross {
-  color: blue;
+  color: #e4b900;
 }
 
 .message {
-  margin: auto;
+  margin: 20px auto;
   font-size: large;
   font-weight: bold;
+  text-align: center;
+  align-items: center;
+  color: #dee7e4;
+}
+
+.reset-btn {
+  margin: 20px auto;
+  padding: 15px 40px;
+  border: none;
+  background-color: #20313c;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 35px;
+  color: #45b391;
 }
 
 
