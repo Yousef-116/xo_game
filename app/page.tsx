@@ -28,7 +28,7 @@ export default function Home() {
     winningCombos.forEach(combo => {
       if (cells[combo[0]] === cells[combo[1]] && cells[combo[1]] === cells[combo[2]] && cells[combo[0]] !== "") {
         currentWinner = cells[combo[0]];
-        console.log(currentWinner)
+        /*console.log(currentWinner)*/
       }
     });
     if (currentWinner) {
