@@ -23,16 +23,18 @@ body {
   height: 300px;
   margin: 20px auto;
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Creates 3 equal columns */
-  grid-gap: 3px; /* Optional: Adds space between grid items */
+  grid-template-columns: repeat(3, 1fr);
+  /* Creates 3 equal columns */
+  grid-gap: 3px;
+  /* Optional: Adds space between grid items */
 }
 
 .square {
-   height: 100px;
+  height: 100px;
   box-sizing: border-box;
   font-size: 50px;
   /*font-weight: bolder;*/
-  display: flex; 
+  display: flex;
   text-align: center;
   justify-content: center;
   background-color: #20313c;
@@ -55,8 +57,10 @@ body {
   color: #e4b900;
 }
 
+
+
 .message {
-  margin: 50px auto 20px;
+  margin: 20px auto;
   font-size: large;
   font-weight: bold;
   text-align: center;
@@ -65,8 +69,9 @@ body {
 }
 
 .reset-btn {
-  margin: 20px auto;
-  padding: 15px 40px;
+  /* margin: 20px auto;*/
+  margin-left: 10px;
+  padding: 10px 20px;
   border: none;
   background-color: #20313c;
   color: white;
@@ -79,6 +84,49 @@ body {
   color: #45b391;
 }
 
+.result-row {
+  /* margin: auto; */
+
+}
+
+.p1w {
+
+  color: #111b22;
+  background-color: #45b391;
+
+}
+
+.p2w {
+  color: #111b22;
+  background-color: #e4b900;
+}
+
+.p1 {
+  font-size: 19px;
+  color: #111b22;
+  background-color: #45b391;
+  height: 50px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.p2 {
+  font-size: 19px;
+  color: #111b22;
+  background-color: #e4b900;
+  height: 50px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.draw {
+  color: #111b22;
+  font-size: 19px;
+  height: 50px;
+  background-color: #cfcfcf;
+  border-radius: 15px;
+  text-align: center;
+}
 
 /* :root {
   --max-width: 1100px;
