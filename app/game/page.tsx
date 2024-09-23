@@ -2,6 +2,25 @@
 import { useEffect, useState } from "react";
 import ResultRow from "../components/resultRow";
 import Cell from "../components/cell";
+import { useRouter } from 'next/navigation';
+import { getDatabase, ref, onValue, update } from "firebase/database";
+import { initializeApp } from "firebase/app";
+import { useSearchParams } from "next/navigation";
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyDQJQpmKp-Ffkz9To51pA9ZxD_7oC3zN38",
+    authDomain: "xo-game-ae7b9.firebaseapp.com",
+    projectId: "xo-game-ae7b9",
+    storageBucket: "xo-game-ae7b9.appspot.com",
+    messagingSenderId: "418879005181",
+    appId: "1:418879005181:web:5893d95d07bc3b751bb994",
+    measurementId: "G-8NX5EMW78T",
+    databaseURL: "https://xo-game-ae7b9-default-rtdb.firebaseio.com",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
 const winningCombos = [
     [0, 1, 2],
@@ -14,7 +33,7 @@ const winningCombos = [
     [2, 4, 6],
 ];
 
-export default function Home() {
+export default function Home() { // Get roomId from params
     const [cells, setCells] = useState(["", "", "", "", "", "", "", "", ""]);
     const [go, setGo] = useState("circle");
     const [winner, setWinner] = useState(""); // Use state for winner
@@ -23,41 +42,120 @@ export default function Home() {
     const [draw, setDraw] = useState(0);
     const [winningIndices, setWinningIndices] = useState<number[]>([]);
 
+    const db = getDatabase();
+    const searchParams = useSearchParams();
+    const roomId = searchParams.get("roomId");
+    const playerOne = searchParams.get("playerOne") || "circle"; // Default to empty string
+    const playerTwo = searchParams.get("playerTwo") || "cross";
+
+    const [roomPlayerOne, setRoomPlayerOne] = useState("");
+    const [roomPlayerTwo, setRoomPlayerTwo] = useState("");
+
+    useEffect(() => {
+        const roomRef = ref(db, `rooms/${roomId}`);
+
+        // Fetch room data
+        const unsubscribe = onValue(roomRef, (snapshot) => {
+            const room = snapshot.val();
+            if (room) {
+                setCells(room.board);
+                setGo(room.turn);
+                const currentRoomPlayerOne = room.players.playerOne; // Store temporarily
+                const currentRoomPlayerTwo = room.players.playerTwo; // Store temporarily
+                setRoomPlayerOne(currentRoomPlayerOne);
+                setRoomPlayerTwo(currentRoomPlayerTwo);
+                checkWinner(room.board, currentRoomPlayerOne, currentRoomPlayerTwo); // Pass players to checkWinner
+            }
+        });
+
+        // Cleanup listener on unmount
+        return () => {
+            if (unsubscribe) {
+                unsubscribe();
+            }
+        };
+    }, [db, roomId]);
+
+    useEffect(() => {
+        console.log("Updated roomPlayerOne: ", roomPlayerOne);
+        console.log("Updated roomPlayerTwo: ", roomPlayerTwo);
+    }, [roomPlayerOne]);
+
+
     function reset_the_variables() {
         setCells(["", "", "", "", "", "", "", "", ""]);
-        setGo(winner);
+        if (winner == "Draw!") {
+            setGo(roomPlayerOne)
+        }
+        else {
+            setGo(winner);
+        }
         setWinner("");
         setWinningIndices([]);
     }
-    useEffect(() => {
+
+    const handleCellClick = (index: number) => {
+        //console.log("main handle click " + index + " go " + go + " playerone " + playerOne);
+        //console.log("room id -> " + roomId);
+        //console.log("main handle click " + index + " go " + go + " playerone " + playerOne);
+        if (cells[index] === "" && !winner && go == playerOne) {
+            //console.log(`Cell clicked: ${index}`);
+            const newCells = [...cells];
+            newCells[index] = go;
+            setCells(newCells);
+            //checkWinner(newCells,room);
+            //setGo(go === playerOne ? playerTwo : playerOne); // Toggle turn
+
+            const roomRef = ref(db, `rooms/${roomId}`);
+            update(roomRef, {
+                board: newCells,
+                turn: go === playerOne ? playerTwo : playerOne // Toggle turn
+            })
+                .then(() => {
+                    //console.log("Board and turn updated in Firebase");
+                })
+                .catch((error) => {
+                    console.error("Error updating Firebase: ", error);
+                });
+
+            setGo(go === playerOne ? playerTwo : playerOne);
+
+
+        }
+    };
+
+    const checkWinner = (newCells: string[], currentRoomPlayerOne: string, currentRoomPlayerTwo: string) => {
         let currentWinner = "";
         winningCombos.forEach(combo => {
-            if (cells[combo[0]] === cells[combo[1]] && cells[combo[1]] === cells[combo[2]] && cells[combo[0]] !== "") {
-                currentWinner = cells[combo[0]];
+            if (
+                newCells[combo[0]] === newCells[combo[1]] &&
+                newCells[combo[1]] === newCells[combo[2]] &&
+                newCells[combo[0]] !== ""
+            ) {
+                currentWinner = newCells[combo[0]];
                 setWinningIndices(combo);
             }
         });
 
         if (currentWinner) {
-            // Only set the winner if it has changed
-            if (winner !== currentWinner) {
-                setWinner(currentWinner);
-                if (currentWinner === "circle") {
-                    setPlayer1(prev => prev + 1);
-                } else if (currentWinner === "cross") {
-                    setPlayer2(prev => prev + 1);
-                }
+            setWinner(currentWinner);
+            console.log("Winner detected: " + currentWinner, " p1 : " + currentRoomPlayerOne + " p2 : " + currentRoomPlayerTwo);
+
+            if (currentWinner === currentRoomPlayerOne) {
+                setPlayer1(prev => prev + 1);
+                console.log("Player One wins: " + currentRoomPlayerOne);
+            } else if (currentWinner === currentRoomPlayerTwo) {
+                setPlayer2(prev => prev + 1);
+                console.log("Player Two wins: " + currentRoomPlayerTwo);
             }
-        } else if (cells.every(cell => cell !== "") && winner === "") {
+        } else if (newCells.every(cell => cell !== "") && winner === "") {
             setWinner("Draw!");
             setDraw(prev => prev + 1);
         }
+    };
 
-        console.log(winningIndices);
-    }, [cells, winner]);
 
-    // useEffect(() => {
-    // }, [cells]);
+
 
     return (
         <div className="container">
@@ -81,10 +179,24 @@ export default function Home() {
             </div>
             <div className="gameboard">
                 {cells.map((cell, index) => (
-                    <Cell id={index} go={go} setGo={setGo} key={index} cells={cells} setCells={setCells} winner={winner} winningIndices={winningIndices} />
+                    <Cell
+                        //key={index}
+                        id={index}
+                        go={go}
+                        //setGo={setGo}
+                        cells={cells}
+                        //setCells={setCells}
+                        roomPlayerOne={roomPlayerOne}
+
+                        winner={winner}
+                        winningIndices={winningIndices}
+                        handleCellClick={handleCellClick}
+                    />
                 ))}
             </div>
             <ResultRow player1={player1} player2={player2} draw={draw} ></ResultRow>
+
+
         </div>
     );
 }

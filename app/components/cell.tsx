@@ -3,48 +3,49 @@ import React from 'react';
 import { Icon } from '@iconify/react';
 
 type CellProps = {
-    go: string;
-    setGo: Dispatch<SetStateAction<string>>;
     id: number;
+    go: string;
     cells: string[];
-    setCells: Dispatch<SetStateAction<string[]>>;
+    roomPlayerOne: string;
     winner: string;
-    winningIndices: number[]; // Changed to number[] based on your previous setup
+    winningIndices: number[];
+    handleCellClick: (index: number) => void;
 }
 
-function Cell({ id, go, setGo, cells, setCells, winner, winningIndices }: CellProps) {
+function Cell({ id, go, cells, roomPlayerOne, winner, winningIndices, handleCellClick }: CellProps) {
     const isWinningCell = winningIndices.includes(id);
-    const cellStyle = isWinningCell ? ( winner === "circle" ? "p1w" : "p2w" ) : "";
+    const cellStyle = isWinningCell ? (winner === "circle" ? "p1w" : "p2w") : "";
+
+    const handleClick = () => {
+        if (winner === "" || winner === "Draw!") {
+            const isTaken = !!cells[id];
+            if (!isTaken) {
+                //console.log("roomplayerone: " + roomPlayerOne + " cells-id : " + cells[id]);
+                //console.log("Cell clicked:", id);
+                handleCellClick(id); // Call the function to handle the click
+            }
+        }
+    };
 
     return (
         <div
-            className={`square ${cells[id]} ${cellStyle}`}
-            //style={cellStyle}
-            onClick={() => {
-                if (winner === "" || winner === "Draw!") {
-                    const isTaken = !!cells[id];
-                    if (!isTaken) {
-                        const newCells = [...cells]; // Create a new array
-                        newCells[id] = go; // Update the new array
-                        setCells(newCells); // Set the new array in state
-
-                        setGo(go === "circle" ? "cross" : "circle"); // Toggle between players
-                        console.log(winningIndices);
-                    }
-                }
-            }}
+            className={`square ${cells[id] === roomPlayerOne ? "circle" : "cross"} ${cellStyle}`}
+            onClick={handleClick}
         >
-            {cells[id] ? (
-                cells[id] === "circle" ? (
-                    <Icon className="c" icon="material-symbols:circle-outline" />
-                ) : cells[id] === "cross" ? (
-                    <Icon className="x" icon="maki:cross" />
-                ) : cells[id] === "circlewin" ? (
-                    <div className="circle-win">Circle Wins!</div>
-                ) : cells[id] === "crosswin" ? (
-                    <div className="cross-win">Cross Wins!</div>
-                ) : null
-            ) : null}
+            {cells[id] && (
+                <>
+                    {(() => {
+                        if (cells[id] === "circle" || cells[id] === roomPlayerOne) {
+                            return <Icon className="c" icon="material-symbols:circle-outline" />;
+                        } else if (cells[id] === "cross" || cells[id] !== "") {
+                            return <Icon className="x" icon="maki:cross" />;
+                        }
+
+
+                        return null; // Return null if none of the conditions are met
+                    })()}
+                </>
+            )}
         </div>
     );
 }
