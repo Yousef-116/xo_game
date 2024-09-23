@@ -68,7 +68,7 @@ export default function Login() {
         },
         board: Array<string>(9).fill(""),
         turn: playerOne,
-        status: "waiting", // Initial status
+        //status: "waiting", // Initial status
       });
       setRoomKey(newRoomKey);
       waitForSecondPlayer(newRoomKey);

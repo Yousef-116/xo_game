@@ -76,22 +76,31 @@ export default function Home() { // Get roomId from params
         };
     }, [db, roomId]);
 
-    useEffect(() => {
-        console.log("Updated roomPlayerOne: ", roomPlayerOne);
-        console.log("Updated roomPlayerTwo: ", roomPlayerTwo);
-    }, [roomPlayerOne]);
+    // useEffect(() => {
+    //     console.log("Updated roomPlayerOne: ", roomPlayerOne);
+    //     console.log("Updated roomPlayerTwo: ", roomPlayerTwo);
+    // }, [roomPlayerOne]);
 
 
-    function reset_the_variables() {
+
+    async function reset_the_variables() {
         setCells(["", "", "", "", "", "", "", "", ""]);
+        let turnOn = "";
         if (winner == "Draw!") {
-            setGo(roomPlayerOne)
+            turnOn = roomPlayerOne;
         }
         else {
-            setGo(winner);
+            turnOn = winner;
         }
+        setGo(turnOn);
         setWinner("");
         setWinningIndices([]);
+        const roomRef = ref(db, `rooms/${roomId}`);
+        await update(roomRef, {
+            board: ["", "", "", "", "", "", "", "", ""],
+            turn: turnOn,
+            //Reset: 0, // Reset flag to 0 after resetting
+        });
     }
 
     const handleCellClick = (index: number) => {
@@ -134,23 +143,30 @@ export default function Home() { // Get roomId from params
             ) {
                 currentWinner = newCells[combo[0]];
                 setWinningIndices(combo);
+
             }
         });
 
         if (currentWinner) {
             setWinner(currentWinner);
-            console.log("Winner detected: " + currentWinner, " p1 : " + currentRoomPlayerOne + " p2 : " + currentRoomPlayerTwo);
+            //console.log("Winner detected: " + currentWinner, " winner : ", winner, " p1 : " + currentRoomPlayerOne + " p2 : " + currentRoomPlayerTwo);
 
             if (currentWinner === currentRoomPlayerOne) {
                 setPlayer1(prev => prev + 1);
-                console.log("Player One wins: " + currentRoomPlayerOne);
+                //console.log("Player One wins: " + currentRoomPlayerOne);
             } else if (currentWinner === currentRoomPlayerTwo) {
                 setPlayer2(prev => prev + 1);
-                console.log("Player Two wins: " + currentRoomPlayerTwo);
+                //console.log("Player Two wins: " + currentRoomPlayerTwo);
             }
         } else if (newCells.every(cell => cell !== "") && winner === "") {
+            currentWinner = "Draw";
             setWinner("Draw!");
             setDraw(prev => prev + 1);
+        }
+        //console.log("winnnerrrrr : ", winner, winner.length)
+        if (currentWinner == "") {
+            setWinningIndices([]);
+            setWinner("");
         }
     };
 
