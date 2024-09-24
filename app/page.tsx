@@ -87,6 +87,12 @@ export default function Login() {
     });
   };
 
+  function onScreen() {
+
+    router.push(`/offline`);
+
+  }
+
   return (
     <div className="container">
       <div className="inputs">
@@ -112,6 +118,10 @@ export default function Login() {
         <button className="online" onClick={createOrJoinRoom} disabled={loading}>
           {loading ? "Waiting for player..." : "Find or Create Room"}
         </button>
+        <button className="onscreen" onClick={onScreen}>
+          same screen
+        </button>
+
       </div>
     </div>
   );
