@@ -4,6 +4,8 @@ import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, get, update, onValue } from "firebase/database";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -115,9 +117,11 @@ export default function Login() {
       </div>
 
       <div className="play-btns">
-        <button className="online" onClick={createOrJoinRoom} disabled={loading}>
-          {loading ? "Waiting for player..." : "Find or Create Room"}
-        </button>
+        <Suspense fallback={<div>Loading...</div>}>
+          <button className="online" onClick={createOrJoinRoom} disabled={loading}>
+            {loading ? "Waiting for player..." : "Find or Create Room"}
+          </button>
+        </Suspense>
         <button className="onscreen" onClick={onScreen}>
           same screen
         </button>
