@@ -87,7 +87,8 @@ export default function Home() { // Get roomId from params
         setCells(["", "", "", "", "", "", "", "", ""]);
         let turnOn = "";
         if (winner == "Draw!") {
-            turnOn = roomPlayerOne;
+            console.log("go value : " + go);
+            turnOn = go;
         }
         else {
             turnOn = winner;
@@ -125,7 +126,6 @@ export default function Home() { // Get roomId from params
 
         }
     };
-
     const checkWinner = (newCells: string[], currentRoomPlayerOne: string, currentRoomPlayerTwo: string) => {
         let currentWinner = "";
         winningCombos.forEach(combo => {
