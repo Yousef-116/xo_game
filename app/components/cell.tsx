@@ -14,7 +14,7 @@ type CellProps = {
 
 function Cell({ id, go, cells, roomPlayerOne, winner, winningIndices, handleCellClick }: CellProps) {
     const isWinningCell = winningIndices.includes(id);
-    const cellStyle = isWinningCell ? (winner === "circle" ? "p1w" : "p2w") : "";
+    const cellStyle = isWinningCell ? ((winner === "circle" || winner == roomPlayerOne) ? "p1w" : "p2w") : "";
 
     const handleClick = () => {
         if (winner === "" || winner === "Draw!") {

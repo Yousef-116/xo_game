@@ -104,21 +104,14 @@ export default function Home() { // Get roomId from params
     }
 
     const handleCellClick = (index: number) => {
-        //console.log("main handle click " + index + " go " + go + " playerone " + playerOne);
-        //console.log("room id -> " + roomId);
-        //console.log("main handle click " + index + " go " + go + " playerone " + playerOne);
         if (cells[index] === "" && !winner && go == playerOne) {
-            //console.log(`Cell clicked: ${index}`);
             const newCells = [...cells];
             newCells[index] = go;
             setCells(newCells);
-            //checkWinner(newCells,room);
-            //setGo(go === playerOne ? playerTwo : playerOne); // Toggle turn
-
             const roomRef = ref(db, `rooms/${roomId}`);
             update(roomRef, {
                 board: newCells,
-                turn: go === playerOne ? playerTwo : playerOne // Toggle turn
+                turn: go === roomPlayerOne ? roomPlayerTwo : roomPlayerOne // Toggle turn
             })
                 .then(() => {
                     //console.log("Board and turn updated in Firebase");
@@ -127,7 +120,7 @@ export default function Home() { // Get roomId from params
                     console.error("Error updating Firebase: ", error);
                 });
 
-            setGo(go === playerOne ? playerTwo : playerOne);
+            setGo(go === roomPlayerOne ? roomPlayerTwo : roomPlayerOne);
 
 
         }
