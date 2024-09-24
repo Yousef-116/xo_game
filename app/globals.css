@@ -177,7 +177,7 @@ body {
   border: none;
   outline: none;
   border-radius: 10px;
-  padding: auto;
+  /* padding: auto; */
 }
 
 .online:hover {
