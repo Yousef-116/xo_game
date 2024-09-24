@@ -123,7 +123,7 @@ export default function Login() {
           </button>
         </Suspense>
         <button className="onscreen" onClick={onScreen}>
-          same screen
+          Same Screen
         </button>
 
       </div>
