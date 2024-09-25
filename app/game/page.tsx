@@ -5,6 +5,7 @@ import Cell from "../components/cell";
 import { getDatabase, ref, onValue, update } from "firebase/database";
 import { initializeApp } from "firebase/app";
 import { useSearchParams } from "next/navigation";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -130,6 +131,10 @@ function GameComponent() {
                 {winner && (
                     <button className="reset-btn" onClick={resetVariables}>Reset</button>
                 )}
+            </div>
+            <div className="toggle-turn">
+                <div className={`${go === roomPlayerOne ? "circle" : ""}`}><Icon className="c" icon="material-symbols:circle-outline" /></div>
+                <div className={`${go === roomPlayerTwo ? "cross" : ""}`}><Icon className="x" icon="maki:cross" /></div>
             </div>
             <div className="gameboard">
                 {cells.map((cell, index) => (

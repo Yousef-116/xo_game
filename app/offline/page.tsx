@@ -2,6 +2,7 @@
 import Cell from "../components/cell";
 import { useEffect, useState } from "react";
 import ResultRow from "../components/resultRow";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const winningCombos = [
     [0, 1, 2],
@@ -83,14 +84,17 @@ export default function Home() {
                     ) : (
                         <>Player <span className={winner === "circle" ? "circle" : "cross"}>{winner}</span> wins!</>
                     )
-                ) : (
-                    `It's now ${go}'s turn`
-                )}
+                ) : ""}
+
                 {winner && winner !== "" && (
                     <button className="reset-btn" onClick={reset_the_variables}>
                         Reset
                     </button>
                 )}
+            </div>
+            <div className="toggle-turn">
+                <div className={`${go === "circle" ? "circle" : ""}`}><Icon className="c" icon="material-symbols:circle-outline" /></div>
+                <div className={`${go === "cross" ? "cross" : ""}`}><Icon className="x" icon="maki:cross" /></div>
             </div>
             <div className="gameboard">
                 {cells.map((cell, index) => (
