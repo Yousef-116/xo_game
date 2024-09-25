@@ -93,8 +93,8 @@ export default function Home() {
                 )}
             </div>
             <div className="toggle-turn">
-                <div className={`${go === "circle" ? "circle" : ""}`}><Icon className="c" icon="material-symbols:circle-outline" /></div>
-                <div className={`${go === "cross" ? "cross" : ""}`}><Icon className="x" icon="maki:cross" /></div>
+                <div className={`${go === "circle" ? "circle" : ""}`}><Icon className="" icon="material-symbols:circle-outline" /></div>
+                <div className={`${go === "cross" ? "cross" : ""}`}><Icon className="" icon="maki:cross" /></div>
             </div>
             <div className="gameboard">
                 {cells.map((cell, index) => (

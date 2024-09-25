@@ -199,8 +199,8 @@ body {
   background-color: #20313c;
   display: flex;
   gap: 3px;
-  height: 50px;
-  font-size: 13px;
+  /* height: 50px; */
+
   padding: 3px;
   border-radius: 4px;
   color: rgb(151, 151, 151)
@@ -212,6 +212,7 @@ body {
   align-items: center;
   width: 25px;
   height: 25px;
+  font-size: 15px;
   border-radius: 4px;
   background-color: #1e1e1e;
   transition: background-color 0.3s ease;

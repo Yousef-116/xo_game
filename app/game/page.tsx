@@ -133,8 +133,8 @@ function GameComponent() {
                 )}
             </div>
             <div className="toggle-turn">
-                <div className={`${go === roomPlayerOne ? "circle" : ""}`}><Icon className="c" icon="material-symbols:circle-outline" /></div>
-                <div className={`${go === roomPlayerTwo ? "cross" : ""}`}><Icon className="x" icon="maki:cross" /></div>
+                <div className={`${go === roomPlayerOne ? "circle" : ""}`}><Icon className="" icon="material-symbols:circle-outline" /></div>
+                <div className={`${go === roomPlayerTwo ? "cross" : ""}`}><Icon className="" icon="maki:cross" /></div>
             </div>
             <div className="gameboard">
                 {cells.map((cell, index) => (
